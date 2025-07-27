@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+config.json
+token.json
+.env
+# Default ignored files
+/.idea
+/shelf/
+/workspace.xml
+# Environment-dependent path to Maven home directory
+/mavenHomeManager.xml
+
+
