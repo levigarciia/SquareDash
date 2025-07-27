@@ -7,7 +7,7 @@ from discord.ext import commands
 
 load_dotenv()
 
-logger = logging.getLogger('__name__')
+logger = logging.getLogger('squarebot')
 
 # Configurações de Intents
 intents = discord.Intents.default()

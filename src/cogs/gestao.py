@@ -9,6 +9,12 @@ from discord import app_commands
 from discord.ext import commands
 import squarecloud
 
+CAMINHO_BANNER = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    "assets",
+    "squarecloudbanner.png",
+)
+
 
 async def obter_status(app: squarecloud.Application, cliente: squarecloud.Client) -> squarecloud.StatusData:
     """Retorna o StatusData da aplicação lidando com possíveis mudanças na API."""
@@ -90,14 +96,19 @@ class ControlesAplicacao(discord.ui.View):
     """View com botões para controle da aplicação."""
 
     def __init__(self, app: squarecloud.Application, cog: commands.Cog):
-        super().__init__(timeout=1000)
+        super().__init__(timeout=60)
         self.app = app
         self.cog = cog
 
     async def atualizar_mensagem(self, interaction: discord.Interaction):
         status = await obter_status(self.app, self.cog.cliente)
         embed = criar_embed(self.app, status)
-        await interaction.response.edit_message(embed=embed, view=self)
+        arquivo = discord.File(CAMINHO_BANNER, filename="squarecloudbanner.png")
+        await interaction.response.edit_message(
+            embed=embed,
+            view=self,
+            attachments=[arquivo],
+        )
 
     @discord.ui.button(emoji="🔷", style=discord.ButtonStyle.secondary)
     async def atualizar(self, interaction: discord.Interaction, _: discord.ui.Button):
@@ -161,7 +172,13 @@ class MenuAplicacoes(discord.ui.View):
         status = await obter_status(app, self.cog.cliente)
         embed = criar_embed(app, status)
         view = ControlesAplicacao(app, self.cog)
-        await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+        arquivo = discord.File(CAMINHO_BANNER, filename="squarecloudbanner.png")
+        await interaction.response.send_message(
+            embed=embed,
+            view=view,
+            file=arquivo,
+            ephemeral=True,
+        )
 
 
 def criar_embed(app: squarecloud.Application, status: squarecloud.StatusData) -> discord.Embed:
@@ -180,12 +197,12 @@ def criar_embed(app: squarecloud.Application, status: squarecloud.StatusData) ->
         minutos, segundos = divmod(resto, 60)
         return f"{horas:02}:{minutos:02}:{segundos:02}"
 
-    cor = discord.Color.green() if status.running else discord.Color.red()
     embed = discord.Embed(
         title=app.name,
         description="Aplicação hospedada via SquareCloud",
-        colour=cor,
+        colour=discord.Color.from_rgb(255, 255, 255),
     )
+    embed.set_image(url="attachment://squarecloudbanner.png")
 
     emoji_status = "🟢" if status.running else "🔴"
     embed.add_field(name="📊 Status", value=f"{emoji_status} **{status.status}**", inline=True)
@@ -227,7 +244,21 @@ class Gestao(commands.Cog):
             await interaction.response.send_message(f"Erro ao obter aplicações: {exc}", ephemeral=True)
             return
         view = MenuAplicacoes(apps, self)
-        await interaction.response.send_message("Selecione uma aplicação:", view=view, ephemeral=True)
+
+        arquivo = discord.File(CAMINHO_BANNER, filename="squarecloudbanner.png")
+
+        embed = discord.Embed(
+            description="Selecione uma aplicação:",
+            colour=discord.Color.from_rgb(255, 255, 255),
+        )
+        embed.set_image(url="attachment://squarecloudbanner.png")
+
+        await interaction.response.send_message(
+            embed=embed,
+            view=view,
+            file=arquivo,
+            ephemeral=True,
+        )
 
 
 async def setup(bot: commands.Bot):
