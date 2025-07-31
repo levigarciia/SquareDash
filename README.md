@@ -1,6 +1,8 @@
 # SquareBot
 
-SquareBot é um bot de Discord focado na gestão de aplicações hospedadas na [Square Cloud](https://squarecloud.app/). Ele combina comandos simples e interfaces interativas para facilitar o deploy, o controle das aplicações e o acompanhamento de pagamentos.
+![Banner da Square Cloud](src/assets/squarecloudbanner.png)
+
+SquareBot é um bot de Discord focado na gestão de aplicações hospedadas na [Square Cloud](https://squarecloud.app/). Além de comandos de deploy e monitoramento, ele integra cobrança via Mercado Pago para automatizar o gerenciamento de suas aplicações.
 
 ## Recursos Principais
 
@@ -18,39 +20,50 @@ SquareBot é um bot de Discord focado na gestão de aplicações hospedadas na [
   - Monitora periodicamente o status das aplicações.
   - Caso alguma pare de responder, envia mensagem direta ao administrador definido.
 
-Tudo é pensado para ser simples: basta configurar os tokens, usar os comandos de barra e acompanhar as respostas enviadas pelo próprio Discord.
+## Pré-requisitos
 
-## Instalação
+- Python 3.10 ou superior;
+- Conta no Discord e um bot criado;
+- Conta na [Square Cloud](https://squarecloud.app/).
 
-1. Clone este repositório e instale as dependências:
+## Execução Local
+
+1. Clone este repositório e crie um ambiente virtual (opcional, mas recomendado):
    ```bash
+   git clone https://github.com/seu-usuario/SquareDash.git
+   cd SquareDash
+   python -m venv venv && source venv/bin/activate
    pip install -r requirements.txt
    ```
-2. Defina a variável de ambiente `BOT_TOKEN` com o token do seu bot no Discord.
-3. Execute o bot:
+2. Crie um arquivo `.env` contendo:
+   ```env
+   BOT_TOKEN=<seu-token-do-discord>
+   ```
+3. Inicie o bot:
    ```bash
    python src/SquareBot.py
    ```
 
-## Configuração Inicial
+## Configuração Inicial pelo Discord
 
-Utilize o comando `/configurar` dentro do Discord para registrar:
+Dentro do seu servidor, utilize `/configurar` para registrar:
 
-- **Token da Square Cloud**: necessário para controlar suas aplicações.
-- **Token do Mercado Pago** e **link do ZIP** (opcionais): habilitam o comando `/pagar` e o deploy automático após a confirmação do pagamento.
-- **Preço** (opcional): valor cobrado no Mercado Pago.
-- **ID do administrador** (opcional): usuário que receberá alertas quando algo der errado.
+- **Token da Square Cloud** (obrigatório);
+- **Token do Mercado Pago** e **link do ZIP** (opcionais);
+- **Preço** e **ID do administrador** (opcionais).
 
-As informações ficam salvas em `config.json`, arquivo listado no `.gitignore` para evitar o vazamento de dados sensíveis.
+Todas as informações ficam salvas em `config.json`, que está no `.gitignore` para evitar vazamento de dados sensíveis.
 
-## Funcionamento
+## Hospedagem na Square Cloud
 
-Após configurado, basta utilizar:
+1. Acesse o painel da [Square Cloud](https://squarecloud.app/) e crie uma nova aplicação do tipo **Bot**.
+2. Certifique-se de que o arquivo `squarecloud.config` esteja na raiz do projeto. Ele define o ponto de entrada (`MAIN`), memória e outras opções.
+3. Compacte o repositório em um ZIP contendo todos os arquivos (inclusive `requirements.txt` e `squarecloud.config`).
+4. Envie esse ZIP na aba de deploy da sua aplicação e aguarde o processamento.
+5. No painel de variáveis da Square Cloud, defina `BOT_TOKEN` com o token do seu bot do Discord e quaisquer outras variáveis que desejar.
+6. Clique em **Iniciar** para que o SquareBot fique online. Os logs podem ser acompanhados diretamente no painel.
 
-- `/dashboard` para abrir a tela de gestão das aplicações.
-- `/pagar` para gerar um link de pagamento (se configurado).
-
-O bot também verifica periodicamente o status das aplicações e notifica o administrador caso alguma pare de funcionar. Tudo acontece de forma automática, mantendo sua experiência prática e sem complicações.
+Após o deploy inicial, você pode usar o próprio SquareBot para realizar novos deploys e controlar suas aplicações via Discord.
 
 ## Estrutura do Projeto
 
@@ -64,5 +77,4 @@ O bot também verifica periodicamente o status das aplicações e notifica o adm
 
 ## Contribuições
 
-Sinta-se à vontade para abrir issues ou pull requests com sugestões e melhorias. Este projeto tem como objetivo demonstrar como é simples integrar a Square Cloud a bots de Discord usando Python.
-
+Sinta-se à vontade para abrir issues ou pull requests com sugestões e melhorias. Este projeto demonstra como integrar a Square Cloud a bots de Discord utilizando Python.
