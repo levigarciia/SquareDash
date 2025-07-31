@@ -1,8 +1,8 @@
-# SquareBot
+# SquareDash
 
 ![Banner da Square Cloud](src/assets/squarecloudbanner.png)
 
-SquareBot é um bot de Discord focado na gestão de aplicações hospedadas na [Square Cloud](https://squarecloud.app/). Além de comandos de deploy e monitoramento, ele integra cobrança via Mercado Pago para automatizar o gerenciamento de suas aplicações.
+SquareDash é um bot de Discord focado na gestão de aplicações hospedadas na [Square Cloud](https://squarecloud.app/). Além de comandos de deploy e monitoramento, ele integra cobrança via Mercado Pago para automatizar o gerenciamento de suas aplicações.
 
 ## Recursos Principais
 
